@@ -17,6 +17,8 @@ import type { ConnectWalletReact } from '../types';
 import { ConnectButton } from './ConnectButton';
 import { ConnectWalletText } from './ConnectWalletText';
 import { useWalletContext } from './WalletProvider';
+import { useOnchainKit } from '../../useOnchainKit';
+import { WalletModal } from './WalletModal'
 
 export function ConnectWallet({
   children,
@@ -24,9 +26,14 @@ export function ConnectWallet({
   // In a few version we will officially deprecate this prop,
   // but for now we will keep it for backward compatibility.
   text = 'Connect Wallet',
-  withWalletAggregator = false,
+  withWalletAggregator = false, // TODO: Remove this which is replaced with config.wallet.display
   onConnect,
 }: ConnectWalletReact) {
+
+  const { 
+    config: { wallet: { display } = {} } = {} 
+  } = useOnchainKit();
+
   // Core Hooks
   const { isOpen, setIsOpen } = useWalletContext();
   const { address: accountAddress, status } = useAccount();
@@ -72,7 +79,7 @@ export function ConnectWallet({
   }, [status, hasClickedConnect, onConnect]);
 
   if (status === 'disconnected') {
-    if (withWalletAggregator) {
+    if (withWalletAggregator) { // TODO: Remove in favor of diplay === modal
       return (
         <ConnectButtonRainbowKit.Custom>
           {({ openConnectModal }) => (
@@ -89,6 +96,25 @@ export function ConnectWallet({
             </div>
           )}
         </ConnectButtonRainbowKit.Custom>
+      );
+    }
+    if (display === 'modal') {
+      return (
+        <div className="flex" data-testid="ockConnectWallet_Container">
+          <ConnectButton
+            className={className}
+            connectWalletText={connectWalletText}
+            onClick={() => {
+              setIsOpen(true);
+              setHasClickedConnect(true);
+            }}
+            text={text}
+          />
+          <WalletModal 
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+          />
+        </div>
       );
     }
     return (

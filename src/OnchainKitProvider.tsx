@@ -42,6 +42,11 @@ export function OnchainKitProvider({
           theme: config?.appearance?.theme ?? 'default',
         },
         paymaster: config?.paymaster || defaultPaymasterUrl,
+        wallet: {
+          display: config?.wallet?.display,
+          termsUrl: config?.wallet?.termsUrl,
+          privacyUrl: config?.wallet?.privacyUrl,
+        },
       },
       projectId: projectId ?? null,
       rpcUrl: rpcUrl ?? null,
