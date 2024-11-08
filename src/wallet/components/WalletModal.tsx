@@ -1,3 +1,4 @@
+import { WalletConnectModal } from '@walletconnect/modal';
 import { useEffect, useState } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { cn, pressable, text as themeText } from '../../styles/theme';
@@ -5,20 +6,72 @@ import { cn, pressable, text as themeText } from '../../styles/theme';
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
+  projectId?: string; // Add as param in Provider?
 }
 
-export function WalletModal({ isOpen, onClose }: WalletModalProps) {
+export function WalletModal({
+  isOpen,
+  onClose,
+  projectId,
+}: WalletModalProps) {
   const { connect } = useConnect();
   const connectors = useConnectors();
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [modal] = useState(() => {
+    if (typeof window === 'undefined') return null;
 
-  if (!mounted) {
-    return null;
-  }
+    return new WalletConnectModal({
+      projectId,
+      chains: ['1', '8453'],
+      explorerRecommendedWalletIds: [],
+      explorerExcludedWalletIds: [],
+      themeMode: 'light',
+      enableExplorer: true,
+      mobileWallets: [],
+      desktopWallets: [],
+      walletImages: {},
+      privacyPolicyUrl: undefined,
+      termsOfServiceUrl: undefined,
+    });
+  });
+
+  const handleOtherWallets = async () => {
+    try {
+      if (modal) {
+        await modal.openModal();
+
+        const unsubscribe = modal.subscribeModal(({ open }) => {
+          if (!open) {
+            onClose();
+          }
+        });
+
+        // Store unsubscribe function for cleanup
+        return unsubscribe;
+      }
+    } catch (error) {
+      console.error('Failed to open modal:', error);
+    }
+  };
+
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    if (modal) {
+      unsubscribe = modal.subscribeModal(({ open }) => {
+        if (!open) {
+          onClose();
+        }
+      });
+    }
+
+    return () => {
+      if (modal) {
+        modal.closeModal();
+        unsubscribe?.();
+      }
+    };
+  }, [modal]);
 
   return (
     <div
@@ -35,7 +88,6 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         {/* Sign Up button */}
         <button
           onClick={() => {
-            // WalletPreference.SMART_WALLET
             connect({ connector: connectors[0] });
             onClose();
           }}
@@ -47,7 +99,6 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         {/* Base Wallet button */}
         <button
           onClick={() => {
-            // WalletPreference.EOA
             connect({ connector: connectors[1] });
             onClose();
           }}
@@ -56,17 +107,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           Base Wallet
         </button>
 
-        {/*           
-            Other Wallets - Opens WalletConnect 
-              This should open the Reown (Wallet Connect) popup modal where users can connect to multiple wallets.
-              Reown is built on top of wagmi so we might just use their connection hook?
-           */}
-        {/* Other wallets button */}
+        {/* Modified Other wallets button */}
         <button
-          onClick={() => {
-            connect({ connector: connectors[0] });
-            onClose();
-          }}
+          onClick={handleOtherWallets}
           className={cn(pressable.primary, themeText.body, 'w-full')}
         >
           Other wallets
