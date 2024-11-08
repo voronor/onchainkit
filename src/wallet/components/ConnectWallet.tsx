@@ -13,12 +13,12 @@ import {
   text as dsText,
   pressable,
 } from '../../styles/theme';
+import { useOnchainKit } from '../../useOnchainKit';
 import type { ConnectWalletReact } from '../types';
 import { ConnectButton } from './ConnectButton';
 import { ConnectWalletText } from './ConnectWalletText';
+import { WalletModal } from './WalletModal';
 import { useWalletContext } from './WalletProvider';
-import { useOnchainKit } from '../../useOnchainKit';
-import { WalletModal } from './WalletModal'
 
 export function ConnectWallet({
   children,
@@ -29,10 +29,7 @@ export function ConnectWallet({
   withWalletAggregator = false, // TODO: Remove this which is replaced with config.wallet.display
   onConnect,
 }: ConnectWalletReact) {
-
-  const { 
-    config: { wallet: { display } = {} } = {} 
-  } = useOnchainKit();
+  const { config = { wallet: { display: undefined } } } = useOnchainKit();
 
   // Core Hooks
   const { isOpen, setIsOpen } = useWalletContext();
@@ -79,7 +76,8 @@ export function ConnectWallet({
   }, [status, hasClickedConnect, onConnect]);
 
   if (status === 'disconnected') {
-    if (withWalletAggregator) { // TODO: Remove in favor of diplay === modal
+    if (withWalletAggregator) {
+      // TODO: Remove in favor of diplay === modal
       return (
         <ConnectButtonRainbowKit.Custom>
           {({ openConnectModal }) => (
@@ -98,22 +96,16 @@ export function ConnectWallet({
         </ConnectButtonRainbowKit.Custom>
       );
     }
-    if (display === 'modal') {
+    if (config?.wallet?.display === 'modal') {
       return (
         <div className="flex" data-testid="ockConnectWallet_Container">
           <ConnectButton
             className={className}
             connectWalletText={connectWalletText}
-            onClick={() => {
-              setIsOpen(true);
-              setHasClickedConnect(true);
-            }}
+            onClick={() => setIsOpen(true)}
             text={text}
           />
-          <WalletModal 
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-          />
+          <WalletModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </div>
       );
     }
