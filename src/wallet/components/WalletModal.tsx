@@ -1,4 +1,3 @@
-import { WalletConnectModal } from '@walletconnect/modal';
 import { useEffect, useState } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { cn, pressable, text as themeText } from '../../styles/theme';
@@ -6,72 +5,16 @@ import { cn, pressable, text as themeText } from '../../styles/theme';
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
-  projectId?: string; // Add as param in Provider?
+  projectId?: string; // Add as param in Provider
 }
 
 export function WalletModal({
   isOpen,
   onClose,
-  projectId,
+  projectId = '40192f2262be3fcc0d3c18deca9c6346',
 }: WalletModalProps) {
   const { connect } = useConnect();
   const connectors = useConnectors();
-
-  const [modal] = useState(() => {
-    if (typeof window === 'undefined') return null;
-
-    return new WalletConnectModal({
-      projectId,
-      chains: ['1', '8453'],
-      explorerRecommendedWalletIds: [],
-      explorerExcludedWalletIds: [],
-      themeMode: 'light',
-      enableExplorer: true,
-      mobileWallets: [],
-      desktopWallets: [],
-      walletImages: {},
-      privacyPolicyUrl: undefined,
-      termsOfServiceUrl: undefined,
-    });
-  });
-
-  const handleOtherWallets = async () => {
-    try {
-      if (modal) {
-        await modal.openModal();
-
-        const unsubscribe = modal.subscribeModal(({ open }) => {
-          if (!open) {
-            onClose();
-          }
-        });
-
-        // Store unsubscribe function for cleanup
-        return unsubscribe;
-      }
-    } catch (error) {
-      console.error('Failed to open modal:', error);
-    }
-  };
-
-  useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-
-    if (modal) {
-      unsubscribe = modal.subscribeModal(({ open }) => {
-        if (!open) {
-          onClose();
-        }
-      });
-    }
-
-    return () => {
-      if (modal) {
-        modal.closeModal();
-        unsubscribe?.();
-      }
-    };
-  }, [modal]);
 
   return (
     <div
@@ -109,7 +52,9 @@ export function WalletModal({
 
         {/* Modified Other wallets button */}
         <button
-          onClick={handleOtherWallets}
+          onClick={() => {
+            
+          }}
           className={cn(pressable.primary, themeText.body, 'w-full')}
         >
           Other wallets
