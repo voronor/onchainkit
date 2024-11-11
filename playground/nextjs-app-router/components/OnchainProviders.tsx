@@ -25,7 +25,7 @@ export const config = createConfig({
       preference: 'eoaOnly',
     }),
     walletConnect({
-      projectId: ENVIRONMENT_VARIABLES[ENVIRONMENT.PROJECT_ID] ?? '',
+      projectId: ENVIRONMENT_VARIABLES[ENVIRONMENT.WALLETCONNECT_PROJECT_ID] ?? '',
       showQrModal: true,
       metadata: {
         name: 'Onchainkit',
