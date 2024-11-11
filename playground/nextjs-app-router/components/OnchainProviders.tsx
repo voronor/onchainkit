@@ -25,7 +25,7 @@ export const config = createConfig({
       preference: 'eoaOnly',
     }),
     walletConnect({
-      projectId: ENVIRONMENT_VARIABLES[ENVIRONMENT.WALLETCONNECT_PROJECT_ID] || '',
+      projectId: ENVIRONMENT_VARIABLES[ENVIRONMENT.PROJECT_ID] ?? '',
       showQrModal: true,
       metadata: {
         name: 'Onchainkit',
@@ -33,7 +33,7 @@ export const config = createConfig({
         url: 'https://onchainkit.xyz/',
         icons: [],
       },
-    })
+    }),
   ],
 });
 
@@ -55,6 +55,8 @@ function OnchainProviders({ children }: { children: ReactNode }) {
             },
             wallet: {
               display: 'modal',
+              termsUrl: 'https://www.coinbase.com/legal/privacy', // URL to the terms of service for the wallet modal
+              privacyUrl: 'https://www.coinbase.com/legal/cookie', // URL to the privacy policy for the wallet modal
             },
           }}
           projectId={ENVIRONMENT_VARIABLES[ENVIRONMENT.PROJECT_ID]}

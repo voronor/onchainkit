@@ -1,4 +1,3 @@
-import { ConnectButton as ConnectButtonRainbowKit } from '@rainbow-me/rainbowkit';
 import { Children, isValidElement, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
@@ -26,7 +25,6 @@ export function ConnectWallet({
   // In a few version we will officially deprecate this prop,
   // but for now we will keep it for backward compatibility.
   text = 'Connect Wallet',
-  withWalletAggregator = false, // TODO: Remove this which is replaced with config.wallet.display
   onConnect,
 }: ConnectWalletReact) {
   const { config = { wallet: { display: undefined } } } = useOnchainKit();
@@ -76,26 +74,6 @@ export function ConnectWallet({
   }, [status, hasClickedConnect, onConnect]);
 
   if (status === 'disconnected') {
-    if (withWalletAggregator) {
-      // TODO: Remove in favor of diplay === modal
-      return (
-        <ConnectButtonRainbowKit.Custom>
-          {({ openConnectModal }) => (
-            <div className="flex" data-testid="ockConnectWallet_Container">
-              <ConnectButton
-                className={className}
-                connectWalletText={connectWalletText}
-                onClick={() => {
-                  openConnectModal();
-                  setHasClickedConnect(true);
-                }}
-                text={text}
-              />
-            </div>
-          )}
-        </ConnectButtonRainbowKit.Custom>
-      );
-    }
     if (config?.wallet?.display === 'modal') {
       return (
         <div className="flex" data-testid="ockConnectWallet_Container">
