@@ -1,17 +1,14 @@
-import { useEffect, useState } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { cn, pressable, text as themeText } from '../../styles/theme';
 
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
-  projectId?: string; // Add as param in Provider
 }
 
 export function WalletModal({
   isOpen,
   onClose,
-  projectId = '40192f2262be3fcc0d3c18deca9c6346',
 }: WalletModalProps) {
   const { connect } = useConnect();
   const connectors = useConnectors();
@@ -50,10 +47,17 @@ export function WalletModal({
           Base Wallet
         </button>
 
-        {/* Modified Other wallets button */}
+        {/* Other wallets button */}
         <button
           onClick={() => {
-            
+            // Find the WalletConnect connector
+            const walletConnectConnector = connectors.find(
+              (c) => c.name === 'WalletConnect'
+            );
+            if (walletConnectConnector) {
+              connect({ connector: walletConnectConnector });
+              onClose();
+            }
           }}
           className={cn(pressable.primary, themeText.body, 'w-full')}
         >
