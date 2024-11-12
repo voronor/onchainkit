@@ -1,4 +1,5 @@
 import { useConnect, useConnectors } from 'wagmi';
+import { defaultAvatarSVG } from '../../internal/svg/defaultAvatarSVG';
 import {
   background,
   border,
@@ -69,21 +70,6 @@ const WalletConnectIcon = () => (
   </svg>
 );
 
-const UserIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16ZM10.2656 5.59896C10.2656 4.34769 9.25129 3.33333 8.00002 3.33333C6.74875 3.33333 5.7344 4.34769 5.7344 5.59896C5.7344 6.85023 6.74875 7.86458 8.00002 7.86458C9.25129 7.86458 10.2656 6.85023 10.2656 5.59896ZM4.53813 9.34479L3.8139 11.275C4.88563 12.339 6.36074 12.9972 7.9896 13H8.01039C9.63925 12.9972 11.1144 12.339 12.1861 11.275L11.4619 9.34479C11.2021 8.65 10.5435 8.19083 9.80646 8.17271C9.7823 8.19083 8.9848 8.77083 8.00001 8.77083C7.01522 8.77083 6.21772 8.19083 6.19355 8.17271C5.45647 8.18479 4.79792 8.65 4.53813 9.34479Z"
-      fill="#030712"
-    />
-  </svg>
-);
-
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -115,17 +101,17 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           border.radius,
           background.default,
           line.default,
-          'mt-[116px] h-[390px] w-[323px] p-4',
+          'mt-[116px] h-[390px] w-[323px] p-6 pb-4',
           'border-x-0 border-t border-b-0',
           'flex flex-col gap-4',
         )}
         onClick={(e) => e.stopPropagation()}
       >
         {(appLogo || appName) && (
-          <div className="mb-2 flex flex-col items-center">
+          <div className='flex h-[116px] w-[275px] flex-col items-center gap-3 self-stretch'>
             {appLogo && (
               <div
-                className={cn(border.radius, 'mb-2 h-16 w-16 overflow-hidden')}
+                className={cn(border.radius, 'mb-2 h-14 w-14 overflow-hidden')}
               >
                 <img
                   src={appLogo}
@@ -135,7 +121,15 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               </div>
             )}
             {appName && (
-              <h2 className={cn(text.title3, color.foreground)}>{appName}</h2>
+              <h2
+                className={cn(
+                  text.title3,
+                  color.foreground,
+                  'font-dmSans font-semibold',
+                )}
+              >
+                {appName}
+              </h2>
             )}
           </div>
         )}
@@ -147,20 +141,21 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               onClose();
             }}
             className={cn(
+              background.default,
               border.radiusInner,
               line.default,
               text.label2,
-              pressable.primary,
-              color.inverse,
-              'h-[40px] w-[275px]',
+              pressable.default,
+              color.foreground,
+              'h-10 w-[275px]',
               'px-4 py-2.5',
-              'border-x-0 border-t border-b-0',
+              'border border-[#D1D5DB]',
               'flex items-center justify-between',
               'text-left',
             )}
           >
             Sign Up
-            <UserIcon />
+            <div className='h-4 w-4'>{defaultAvatarSVG}</div>
           </button>
 
           <div className="relative">
@@ -190,8 +185,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               border.radiusInner,
               line.default,
               text.label2,
-              pressable.primary,
+              pressable.default,
               color.inverse,
+              color.foreground,
               'h-[40px] w-[275px]',
               'px-4 py-2.5',
               'border-x-0 border-t border-b-0',
@@ -217,8 +213,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               border.radiusInner,
               line.default,
               text.label2,
-              pressable.primary,
+              pressable.default,
               color.inverse,
+              color.foreground,
               'h-[40px] w-[275px]',
               'px-4 py-2.5',
               'border-x-0 border-t border-b-0',
@@ -235,28 +232,32 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           className={cn(
             color.foregroundMuted,
             text.legal,
-            'mt-auto text-center',
+            'flex flex-row items-center justify-center gap-2.5 px-4',
+            'h-[26px] w-[275px]',
+            'text-center',
           )}
         >
-          By connecting a wallet, you agree to our{' '}
-          <a
-            href={termsOfServiceUrl}
-            className={cn(color.primary, text.label2, 'hover:underline')}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Terms of Service
-          </a>{' '}
-          and{' '}
-          <a
-            href={privacyPolicyUrl}
-            className={cn(color.primary, text.label2, 'hover:underline')}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Privacy Policy
-          </a>
-          .
+          <span className='flex-grow font-normal text-[10px] leading-[13px]'>
+            By connecting a wallet, you agree to our{' '}
+            <a
+              href={termsOfServiceUrl}
+              className={cn(color.primary, 'hover:underline')}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms of Service
+            </a>{' '}
+            and{' '}
+            <a
+              href={privacyPolicyUrl}
+              className={cn(color.primary, 'hover:underline')}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Privacy Policy
+            </a>
+            .
+          </span>
         </div>
       </div>
     </div>
