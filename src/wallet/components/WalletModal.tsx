@@ -121,7 +121,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
             {appName && (
               <h2
                 className={cn(
-                  text.title3,
+                  text.headline,
                   color.foreground,
                   'font-dmSans font-semibold',
                 )}
