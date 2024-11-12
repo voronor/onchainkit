@@ -108,11 +108,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {(appLogo || appName) && (
-          <div className='flex h-[116px] w-[275px] flex-col items-center gap-3 self-stretch'>
+          <div className='mt-3 flex h-[116px] w-[275px] flex-col items-center gap-3 self-stretch'>
             {appLogo && (
-              <div
-                className={cn(border.radius, 'mb-2 h-14 w-14 overflow-hidden')}
-              >
+              <div className={cn(border.radius, 'h-14 w-14 overflow-hidden')}>
                 <img
                   src={appLogo}
                   alt={`${appName || 'App'} icon`}
@@ -137,6 +135,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         <div className="flex flex-col gap-3">
           <button
             onClick={() => {
+              // WalletPreference.SMART_WALLET
               connect({ connector: connectors[0] });
               onClose();
             }}
@@ -155,7 +154,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
             )}
           >
             Sign Up
-            <div className='h-4 w-4'>{defaultAvatarSVG}</div>
+            <div className="h-4 w-4">{defaultAvatarSVG}</div>
           </button>
 
           <div className="relative">
@@ -178,6 +177,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
           <button
             onClick={() => {
+              // WalletPreference.EOA
               connect({ connector: connectors[1] });
               onClose();
             }}
@@ -232,13 +232,15 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           className={cn(
             color.foregroundMuted,
             text.legal,
-            'flex flex-row items-center justify-center gap-2.5 px-4',
-            'h-[26px] w-[275px]',
+            'flex flex-col items-center justify-center gap-1 px-4',
+            'w-[275px]',
             'text-center',
           )}
         >
-          <span className='flex-grow font-normal text-[10px] leading-[13px]'>
-            By connecting a wallet, you agree to our{' '}
+          <span className="font-normal text-[10px] leading-[13px]">
+            By connecting a wallet, you agree to our
+          </span>
+          <span className="font-normal text-[10px] leading-[13px]">
             <a
               href={termsOfServiceUrl}
               className={cn(color.primary, 'hover:underline')}
