@@ -1,5 +1,13 @@
 import { useConnect, useConnectors } from 'wagmi';
-import { cn, pressable, text } from '../../styles/theme';
+import {
+  background,
+  border,
+  cn,
+  color,
+  line,
+  pressable,
+  text,
+} from '../../styles/theme';
 import { useOnchainKit } from '../../useOnchainKit';
 
 const BaseIcon = () => (
@@ -96,38 +104,38 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   return (
     <div
       className={cn(
+        `${background.default}/50`,
         'fixed inset-0 z-50 flex items-start justify-center',
-        'ock-bg-default/50',
         !isOpen && 'hidden',
       )}
       onClick={() => onClose()}
     >
       <div
         className={cn(
-          'mt-[116px] h-[390px] w-[323px]',
-          'p-4',
-          'ock-border-radius',
-          'ock-line-default border-x-0 border-t border-b-0',
-          'ock-bg-default',
+          border.radius,
+          background.default,
+          line.default,
+          'mt-[116px] h-[390px] w-[323px] p-4',
+          'border-x-0 border-t border-b-0',
           'flex flex-col gap-4',
         )}
         onClick={(e) => e.stopPropagation()}
       >
         {(appLogo || appName) && (
-          <div className='mb-2 flex flex-col items-center'>
+          <div className="mb-2 flex flex-col items-center">
             {appLogo && (
-              <div className='ock-border-radius mb-2 h-16 w-16 overflow-hidden'>
+              <div
+                className={cn(border.radius, 'mb-2 h-16 w-16 overflow-hidden')}
+              >
                 <img
                   src={appLogo}
                   alt={`${appName || 'App'} icon`}
-                  className='h-full w-full object-cover'
+                  className="h-full w-full object-cover"
                 />
               </div>
             )}
             {appName && (
-              <h2 className={cn(text.title3, 'ock-text-foreground')}>
-                {appName}
-              </h2>
+              <h2 className={cn(text.title3, color.foreground)}>{appName}</h2>
             )}
           </div>
         )}
@@ -139,15 +147,16 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               onClose();
             }}
             className={cn(
+              border.radiusInner,
+              line.default,
+              text.label2,
+              pressable.primary,
+              color.inverse,
               'h-[40px] w-[275px]',
               'px-4 py-2.5',
-              'ock-border-radius-inner',
-              'ock-line-default border-x-0 border-t border-b-0',
+              'border-x-0 border-t border-b-0',
               'flex items-center justify-between',
-              text.label2,
               'text-left',
-              pressable.primary,
-              'ock-text-inverse',
             )}
           >
             Sign Up
@@ -156,10 +165,17 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className='ock-line-default w-full border-t' />
+              <div className={cn(line.default, 'w-full')} />
             </div>
-            <div className="relative flex justify-center text-xs">
-              <span className='ock-bg-default ock-text-foreground-muted px-2'>
+            <div className="relative flex justify-center">
+              <span
+                className={cn(
+                  background.default,
+                  color.foregroundMuted,
+                  text.legal,
+                  'px-2',
+                )}
+              >
                 or continue with an existing wallet
               </span>
             </div>
@@ -171,15 +187,16 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               onClose();
             }}
             className={cn(
+              border.radiusInner,
+              line.default,
+              text.label2,
+              pressable.primary,
+              color.inverse,
               'h-[40px] w-[275px]',
               'px-4 py-2.5',
-              'ock-border-radius-inner',
-              'ock-line-default border-x-0 border-t border-b-0',
+              'border-x-0 border-t border-b-0',
               'flex items-center justify-between',
-              text.label2,
               'text-left',
-              pressable.primary,
-              'ock-text-inverse',
             )}
           >
             Base Wallet
@@ -197,15 +214,16 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               }
             }}
             className={cn(
+              border.radiusInner,
+              line.default,
+              text.label2,
+              pressable.primary,
+              color.inverse,
               'h-[40px] w-[275px]',
               'px-4 py-2.5',
-              'ock-border-radius-inner',
-              'ock-line-default border-x-0 border-t border-b-0',
+              'border-x-0 border-t border-b-0',
               'flex items-center justify-between',
-              text.label2,
               'text-left',
-              pressable.primary,
-              'ock-text-inverse',
             )}
           >
             Other wallets
@@ -215,15 +233,15 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
         <div
           className={cn(
-            'mt-auto text-center',
+            color.foregroundMuted,
             text.legal,
-            'ock-text-foreground-muted',
+            'mt-auto text-center',
           )}
         >
           By connecting a wallet, you agree to our{' '}
           <a
             href={termsOfServiceUrl}
-            className={cn('ock-text-primary font-semibold hover:underline')}
+            className={cn(color.primary, text.label2, 'hover:underline')}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -232,7 +250,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           and{' '}
           <a
             href={privacyPolicyUrl}
-            className={cn('ock-text-primary font-semibold hover:underline')}
+            className={cn(color.primary, text.label2, 'hover:underline')}
             target="_blank"
             rel="noopener noreferrer"
           >
